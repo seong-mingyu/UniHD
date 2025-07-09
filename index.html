@@ -101,13 +101,18 @@
       fill: var(--discovery-blue);
     }
     .intro {
-      text-align: center;
-      margin: 2rem 1rem 0;
-      font-family: 'HDHyundaiLight';
-      line-height: 1.4;
-      white-space: nowrap;
-      font-size: clamp(0.6rem, 5vw, 1rem);
-    }
+  text-align: center;
+  margin: 2rem 1rem 0;
+  font-family: 'HDHyundaiLight';
+  line-height: 1.5;
+  font-size: clamp(0.8rem, 4vw, 1rem);
+  white-space: normal; /* 줄바꿈 허용 */
+}
+
+.intro p {
+  margin: 0 0 1rem 0; /* 문단 아래 간격 */
+}
+
     .section-links {
       display: flex;
       flex-direction: column;

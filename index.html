@@ -2,10 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>H-int Internship</title>
-  <link rel="icon" href="assets/images/logo.png" type="image/png">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniHD</title>
+  <link rel="icon" href="assets/images/unihd-logo.png" type="image/png" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <style>
     @font-face {
       font-family: 'HDHyundaiLight';
@@ -80,6 +80,7 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
+      user-select: none;
     }
     .navbar-title a {
       text-decoration: none;
@@ -88,61 +89,25 @@
     .navbar-title .hd {
       color: var(--discovery-blue);
     }
-    .menu-icon {
-      font-size: 1.5rem;
+    .lang-icon {
       cursor: pointer;
-      z-index: 1002;
+      width: 24px;
+      height: 24px;
+      fill: var(--gray-text);
+      transition: fill 0.3s;
+      user-select: none;
     }
-    .menu-popup {
-      position: absolute;
-      top: 64px;
-      right: 20px;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      padding: 0.5rem 1rem;
-      z-index: 999;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-    }
-    .menu-popup.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-    .menu-popup ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .menu-popup li {
-      margin: 0.5rem 0;
-    }
-    .menu-popup a {
-      text-decoration: none;
-      color: var(--gray-text);
-      font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-    .menu-popup a:hover {
-      color: var(--discovery-blue);
+    .lang-icon:hover {
+      fill: var(--discovery-blue);
     }
     .intro {
-  text-align: center;
-  margin: 2rem 1rem 0;
-  font-family: 'HDHyundaiLight';
-  line-height: 1.4;
-
-  /* ↓아래 두 줄을 추가/변경↓ */
-  white-space: nowrap;               /* 자동 줄바꿈 금지 */
-  font-size: clamp(0.6rem, 5vw, 1rem);
-  /* - 최소 0.6rem, 뷰포트 너비의 5% 비례, 최대 1rem */
-}
-
-
+      text-align: center;
+      margin: 2rem 1rem 0;
+      font-family: 'HDHyundaiLight';
+      line-height: 1.4;
+      white-space: nowrap;
+      font-size: clamp(0.6rem, 5vw, 1rem);
+    }
     .section-links {
       display: flex;
       flex-direction: column;
@@ -162,19 +127,14 @@
       font-weight: bold;
       color: var(--gray-text);
       transition: transform 0.2s;
+      user-select: none;
     }
     .section-link:hover {
       transform: scale(1.03);
     }
-    .section-link .highlight-ship { color: var(--trust-blue); }
-    .section-link .highlight-view { color: var(--discovery-blue); }
-    .section-link .highlight-net { color: var(--prosperity-green); }
-    .section-link .highlight-al {
-  background: linear-gradient(90deg, #00B3FF, #9932CC);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
+    .section-link .highlight-culture { color: var(--trust-blue); }
+    .section-link .highlight-language { color: var(--discovery-blue); }
+    .section-link .highlight-meetup { color: var(--prosperity-green); }
     .subtitle {
       font-family: 'HDHyundaiLight';
       font-size: 0.95rem;
@@ -184,6 +144,7 @@
     footer {
       text-align: center;
       padding: 0.5rem 1rem 1rem;
+      user-select: none;
     }
     .group-photo {
       max-width: 100%;
@@ -197,84 +158,109 @@
       margin-top: 1rem;
       color: var(--gray-text);
     }
-  
   </style>
 </head>
 <body>
   <div id="splash">
-    <img src="assets/images/logo.png" alt="로고">
-    <div class="splash-text">H-int Dream</div>
+    <img src="assets/images/unihd-logo.png" alt="UniHD 로고" />
+    <div class="splash-text" data-lang="ko">UniHD - 외국인 노동자와 한국인의 교류 플랫폼</div>
+    <div class="splash-text" data-lang="en" style="display:none;">UniHD - Platform for Foreign Workers and Koreans to Connect</div>
   </div>
 
   <div class="navbar">
-    <img src="assets/images/logo.png" alt="HD현대중공업 로고">
+    <img src="assets/images/unihd-logo.png" alt="UniHD 로고" />
     <div class="navbar-title">
-      <a href="index.html">
-        <span class="hd">H</span>int <span class="hd">D</span>ream
-      </a>
+      <a href="index.html" data-lang="ko"><span class="hd">Uni</span>HD</a>
+      <a href="index.html" data-lang="en" style="display:none;"><span class="hd">Uni</span>HD</a>
     </div>
-    <div class="menu-icon" onclick="toggleMenu()">☰</div>
-  </div>
-
-  <div class="menu-popup" id="menuPopup">
-    <ul>
-    
-      <li><a href="index.html">Home</a></li>
-      <li><a href="ship.html">Intern Ship</a></li>
-      <li><a href="view.html">Intern View</a></li>
-      <li><a href="net.html">Intern Net</a></li>
-    </ul>
+    <!-- 언어 변경용 지구본 아이콘 SVG -->
+    <svg class="lang-icon" id="langToggle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="언어 변경">
+      <title>언어 변경</title>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+        10-4.48 10-10S17.52 2 12 2zm5.93 7h-3.14a15.366 15.366 0 00-1.19-3.66
+        8.036 8.036 0 014.33 3.66zm-5.93-5.9c1.7 0 3.3.63 4.5 1.7a13.665 13.665 0 00-4.5
+        3.44 13.687 13.687 0 00-4.5-3.44c1.2-1.07 2.8-1.7 4.5-1.7zm-5.93 4.2c.27-1.08.74-2.1
+        1.36-3.02A8.065 8.065 0 006.07 8zm-4.5 4a8.045 8.045 0 014.5-3.66 15.35 15.35 0 00-1.19
+        3.66H1.57zm.67 2h3.14a15.366 15.366 0 001.19 3.66 8.04 8.04 0 01-4.33-3.66zm5.26
+        5.9c-1.7 0-3.3-.63-4.5-1.7a13.68 13.68 0 004.5-3.44 13.68 13.68 0 004.5
+        3.44c-1.2 1.07-2.8 1.7-4.5 1.7zm5.26-2.96a15.35 15.35 0 001.19-3.66h3.14a8.04 8.04 0
+        01-4.33 3.66zm.98-6.04a15.36 15.36 0 001.19 3.66h3.14a8.04 8.04 0 01-4.33-3.66z"/>
+    </svg>
   </div>
 
   <div class="intro" data-aos="fade-up">
-    HD현대중공업 인턴 <span style="color: #008233; font-weight: bold;">H-int</span>의 기록을 담은 '힌트 드림' 입니다.<br><br>
-    ‘힌트 드림(Hint Dream)’은 인턴십을 준비할때<br> 필요한 힌트를 전해 드린다는 의미를 담고 있습니다.😊<br><br>
-    아래 항목에서 인턴십에 대한 다양한 정보를 얻어가세요!
+    <div data-lang="ko">
+      HD현대중공업 외국인 노동자와 한국인 간의 교류를 돕는 플랫폼 UniHD입니다.<br /><br />
+      UniHD는 다양한 문화 행사, 언어 교환, 그리고 번개 모임을 통해 서로 소통하고 친해질 수 있는 공간입니다.<br /><br />
+      아래 카테고리에서 원하는 모임에 참여해보세요!
+    </div>
+    <div data-lang="en" style="display:none;">
+      UniHD is a platform to help foreign workers and Koreans connect.<br /><br />
+      Through cultural events, language exchange, and meetup gatherings, UniHD creates a space to communicate and bond.<br /><br />
+      Join the category that interests you below!
+    </div>
   </div>
 
   <div class="section-links">
-    
-    
-    <a href="ship.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
-      <span class="highlight-ship">Intern Ship</span><br>
-      <div class="subtitle">우리의 항해, 인턴십 전체 과정</div>
+    <a href="culture.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
+      <span class="highlight-culture" data-lang="ko">문화행사</span>
+      <span class="highlight-culture" data-lang="en" style="display:none;">Cultural Events</span><br />
+      <div class="subtitle" data-lang="ko">회사에서 공식적으로 올리는 문화 행사</div>
+      <div class="subtitle" data-lang="en" style="display:none;">Official cultural events by the company</div>
     </a>
-    <a href="view.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
-      <span class="highlight-view">Intern View</span><br>
-      <div class="subtitle">우리의 시야, 보고 느낀 것</div>
+    <a href="language.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
+      <span class="highlight-language" data-lang="ko">언어교환</span>
+      <span class="highlight-language" data-lang="en" style="display:none;">Language Exchange</span><br />
+      <div class="subtitle" data-lang="ko">서로 언어 배우고 싶은 사람끼리 매칭</div>
+      <div class="subtitle" data-lang="en" style="display:none;">Match people who want to learn languages</div>
     </a>
-    <a href="net.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
-      <span class="highlight-net">Intern Net</span><br>
-      <div class="subtitle">우리의 네트워킹, 함께한 순간</div>
+    <a href="meetup.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
+      <span class="highlight-meetup" data-lang="ko">번개모임</span>
+      <span class="highlight-meetup" data-lang="en" style="display:none;">Meetup Gatherings</span><br />
+      <div class="subtitle" data-lang="ko">오늘 술 한잔, 탁구 한판 등 모임 성사</div>
+      <div class="subtitle" data-lang="en" style="display:none;">Quick gatherings like drinks or ping-pong</div>
     </a>
   </div>
 
   <footer data-aos="fade-up">
-    <p>
-      Made by <span style="color: #008233; font-weight: bold;">H-int 6기</span> 7조 엔진기계사업부
+    <p data-lang="ko">
+      UniHD 프로젝트 팀 - HD현대중공업
     </p>
-    <img src="assets/images/group.png" alt="단체사진" class="group-photo">
-    <div class="member-names">
-      성민규 · 전수민 · 민성제 · 김동현1 · 노건우<br>
+    <p data-lang="en" style="display:none;">
+      UniHD Project Team - HD Hyundai Heavy Industries
+    </p>
+    <img src="assets/images/group.png" alt="팀 단체사진" class="group-photo" />
+    <div class="member-names" data-lang="ko">
+      성민규 · 전수민 · 민성제 · 김동현1 · 노건우<br />
       김우진 · 김동현4 · 정명수 · 이민규 · 이제진
+    </div>
+    <div class="member-names" data-lang="en" style="display:none;">
+      Seong Mingyu · Jeon Sumin · Min Sungje · Kim Donghyun1 · Noh Gunwoo<br />
+      Kim Woojin · Kim Donghyun4 · Jung Myungsoo · Lee Mingyu · Lee Jejin
     </div>
   </footer>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 800, once: true, offset:0 });
+    AOS.init({ duration: 800, once: true, offset: 0 });
 
-    function toggleMenu() {
-      document.getElementById("menuPopup").classList.toggle("active");
+    // 언어 토글 함수
+    function toggleLanguage() {
+      const koreanElems = document.querySelectorAll('[data-lang="ko"]');
+      const englishElems = document.querySelectorAll('[data-lang="en"]');
+      const isKorean = koreanElems[0].style.display !== "none";
+      if (isKorean) {
+        koreanElems.forEach(el => el.style.display = "none");
+        englishElems.forEach(el => el.style.display = "");
+        document.documentElement.lang = "en";
+      } else {
+        koreanElems.forEach(el => el.style.display = "");
+        englishElems.forEach(el => el.style.display = "none");
+        document.documentElement.lang = "ko";
+      }
     }
 
-    window.addEventListener("click", function (e) {
-      const menu = document.getElementById("menuPopup");
-      const icon = document.querySelector(".menu-icon");
-      if (!menu.contains(e.target) && !icon.contains(e.target)) {
-        menu.classList.remove("active");
-      }
-    });
+    document.getElementById('langToggle').addEventListener('click', toggleLanguage);
 
     window.addEventListener("load", () => {
       setTimeout(() => {

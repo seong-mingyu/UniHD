@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>H-int Internship</title>
+  <link rel="icon" href="assets/images/logo.png" type="image/png">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'HDHyundaiLight';
+      src: url('assets/fonts/HDHyundai-Light.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'HDHyundaiBold';
+      src: url('assets/fonts/HDHyundai-Bold.ttf') format('truetype');
+    }
+    :root {
+      --discovery-blue: #003087;
+      --prosperity-green: #008233;
+      --trust-blue: #002554;
+      --gray-text: #63666A;
+      --bg-light: #f4f4f4;
+    }
+    body {
+      font-family: 'HDHyundaiLight', sans-serif;
+      margin: 0;
+      background-color: var(--bg-light);
+      color: var(--gray-text);
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+    }
+    body.loaded {
+      opacity: 1;
+    }
+    #splash {
+      position: fixed;
+      z-index: 3000;
+      background-color: white;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeSplash 0.8s ease forwards;
+    }
+    #splash img {
+      width: 60px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+    .splash-text {
+      font-family: 'HDHyundaiBold';
+      font-size: 1.5rem;
+      color: #003087;
+    }
+    @keyframes fadeSplash {
+      0% { opacity: 1; }
+      99% { opacity: 0; }
+      100% { display: none; z-index: -1; }
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar img {
+      height: 32px;
+    }
+    .navbar-title {
+      font-size: 1.5rem;
+      font-family: 'HDHyundaiBold';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .navbar-title a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .navbar-title .hd {
+      color: var(--discovery-blue);
+    }
+    .menu-icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1002;
+    }
+    .menu-popup {
+      position: absolute;
+      top: 64px;
+      right: 20px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 0.5rem 1rem;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+    .menu-popup.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .menu-popup ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .menu-popup li {
+      margin: 0.5rem 0;
+    }
+    .menu-popup a {
+      text-decoration: none;
+      color: var(--gray-text);
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .menu-popup a:hover {
+      color: var(--discovery-blue);
+    }
+    .intro {
+  text-align: center;
+  margin: 2rem 1rem 0;
+  font-family: 'HDHyundaiLight';
+  line-height: 1.4;
+
+  /* ↓아래 두 줄을 추가/변경↓ */
+  white-space: nowrap;               /* 자동 줄바꿈 금지 */
+  font-size: clamp(0.6rem, 5vw, 1rem);
+  /* - 최소 0.6rem, 뷰포트 너비의 5% 비례, 최대 1rem */
+}
+
+
+    .section-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1.0rem;
+      padding: 2rem 1rem 1rem;
+      font-family: 'HDHyundaiBold';
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .section-link {
+      background-color: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--gray-text);
+      transition: transform 0.2s;
+    }
+    .section-link:hover {
+      transform: scale(1.03);
+    }
+    .section-link .highlight-ship { color: var(--trust-blue); }
+    .section-link .highlight-view { color: var(--discovery-blue); }
+    .section-link .highlight-net { color: var(--prosperity-green); }
+    .section-link .highlight-al {
+  background: linear-gradient(90deg, #00B3FF, #9932CC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+    .subtitle {
+      font-family: 'HDHyundaiLight';
+      font-size: 0.95rem;
+      margin-top: 0.3rem;
+      color: var(--gray-text);
+    }
+    footer {
+      text-align: center;
+      padding: 0.5rem 1rem 1rem;
+    }
+    .group-photo {
+      max-width: 100%;
+      height: auto;
+      margin-top: 0.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .member-names {
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      color: var(--gray-text);
+    }
+  
+  </style>
+</head>
+<body>
+  <div id="splash">
+    <img src="assets/images/logo.png" alt="로고">
+    <div class="splash-text">H-int Dream</div>
+  </div>
+
+  <div class="navbar">
+    <img src="assets/images/logo.png" alt="HD현대중공업 로고">
+    <div class="navbar-title">
+      <a href="index.html">
+        <span class="hd">H</span>int <span class="hd">D</span>ream
+      </a>
+    </div>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+  </div>
+
+  <div class="menu-popup" id="menuPopup">
+    <ul>
+    
+      <li><a href="index.html">Home</a></li>
+      <li><a href="ship.html">Intern Ship</a></li>
+      <li><a href="view.html">Intern View</a></li>
+      <li><a href="net.html">Intern Net</a></li>
+    </ul>
+  </div>
+
+  <div class="intro" data-aos="fade-up">
+    HD현대중공업 인턴 <span style="color: #008233; font-weight: bold;">H-int</span>의 기록을 담은 '힌트 드림' 입니다.<br><br>
+    ‘힌트 드림(Hint Dream)’은 인턴십을 준비할때<br> 필요한 힌트를 전해 드린다는 의미를 담고 있습니다.😊<br><br>
+    아래 항목에서 인턴십에 대한 다양한 정보를 얻어가세요!
+  </div>
+
+  <div class="section-links">
+    
+    
+    <a href="ship.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
+      <span class="highlight-ship">Intern Ship</span><br>
+      <div class="subtitle">우리의 항해, 인턴십 전체 과정</div>
+    </a>
+    <a href="view.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
+      <span class="highlight-view">Intern View</span><br>
+      <div class="subtitle">우리의 시야, 보고 느낀 것</div>
+    </a>
+    <a href="net.html" class="section-link" data-aos="fade-up" data-aos-delay="200">
+      <span class="highlight-net">Intern Net</span><br>
+      <div class="subtitle">우리의 네트워킹, 함께한 순간</div>
+    </a>
+  </div>
+
+  <footer data-aos="fade-up">
+    <p>
+      Made by <span style="color: #008233; font-weight: bold;">H-int 6기</span> 7조 엔진기계사업부
+    </p>
+    <img src="assets/images/group.png" alt="단체사진" class="group-photo">
+    <div class="member-names">
+      성민규 · 전수민 · 민성제 · 김동현1 · 노건우<br>
+      김우진 · 김동현4 · 정명수 · 이민규 · 이제진
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true, offset:0 });
+
+    function toggleMenu() {
+      document.getElementById("menuPopup").classList.toggle("active");
+    }
+
+    window.addEventListener("click", function (e) {
+      const menu = document.getElementById("menuPopup");
+      const icon = document.querySelector(".menu-icon");
+      if (!menu.contains(e.target) && !icon.contains(e.target)) {
+        menu.classList.remove("active");
+      }
+    });
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("splash").style.display = "none";
+        document.body.classList.add("loaded");
+      }, 800);
+    });
+  </script>
+</body>
+</html>

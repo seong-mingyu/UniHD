@@ -2,227 +2,98 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>UniHD - 문화행사</title>
-  <link rel="icon" href="assets/images/logo.png" type="image/png" />
   <style>
-    @font-face {
-      font-family: 'HDHyundaiLight';
-      src: url('assets/fonts/HDHyundai-Light.ttf');
-    }
-    @font-face {
-      font-family: 'HDHyundaiBold';
-      src: url('assets/fonts/HDHyundai-Bold.ttf');
-    }
-    :root {
-      --discovery-blue: #003087;
-      --prosperity-green: #008233;
-      --trust-blue: #002554;
-      --gray-text: #63666A;
-      --bg-light: #f4f4f4;
-    }
-
+    /* (스타일은 위와 거의 같게 간단히 조정) */
     body {
-      font-family: 'HDHyundaiLight', sans-serif;
-      margin: 0;
-      background-color: var(--bg-light);
-      color: var(--gray-text);
+      font-family: Arial, sans-serif;
+      margin: 0; background: #f4f4f4; color: #63666A;
     }
-
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: white;
-      padding: 1rem 1.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-    .navbar img {
-      height: 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: white; padding: 1rem 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: sticky; top: 0; z-index: 1000;
     }
     .navbar-title {
-      font-size: 1.5rem;
-      font-family: 'HDHyundaiBold';
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .navbar-title a {
-      text-decoration: none;
-      color: inherit;
-    }
-    .navbar-title .hd {
-      color: var(--discovery-blue);
+      font-weight: bold; font-size: 1.5rem; position: absolute; left: 50%;
+      transform: translateX(-50%); color: #003087;
     }
     .lang-switch {
-      font-size: 1.3rem;
-      cursor: pointer;
+      font-size: 1.3rem; cursor: pointer;
     }
-
     .board-container {
-      max-width: 480px; /* 모바일에 적합한 최대 폭 */
-      margin: 1rem auto;
-      padding: 0.5rem 1rem;
-      background: white;
-      border-radius: 12px;
+      max-width: 480px; margin: 1rem auto; padding: 0.5rem 1rem;
+      background: white; border-radius: 12px;
       box-shadow: 0 0 8px rgba(0,0,0,0.1);
       overflow-x: auto;
     }
-
     .board-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
     }
-
     .board-header h2 {
-      font-family: 'HDHyundaiBold';
-      color: var(--discovery-blue);
-      font-size: 1.25rem;
-      margin: 0;
+      font-weight: bold; color: #003087; font-size: 1.25rem; margin: 0;
     }
-
     .write-btn {
-      padding: 0.4rem 0.8rem;
-      background-color: var(--prosperity-green);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-family: 'HDHyundaiBold';
-      cursor: pointer;
-      font-size: 0.9rem;
-      white-space: nowrap;
+      padding: 0.4rem 0.8rem; background: #008233; color: white;
+      border: none; border-radius: 6px; cursor: pointer;
+      font-weight: bold; font-size: 0.9rem; white-space: nowrap;
     }
-
     table {
-      min-width: 400px;
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
+      min-width: 400px; width: 100%; border-collapse: collapse; margin-top: 1rem;
     }
-
     th, td {
-      padding: 0.5rem 0.7rem;
-      border-bottom: 1px solid #ddd;
-      font-size: 0.85rem;
-    }
-
-    th {
-      font-family: 'HDHyundaiBold';
-      border-bottom: 2px solid #000;
+      padding: 0.5rem 0.7rem; border-bottom: 1px solid #ddd; font-size: 0.85rem;
       text-align: left;
     }
-
-    td.post-title {
-      font-weight: bold;
-      color: #333;
-      cursor: pointer;
+    th {
+      font-weight: bold; border-bottom: 2px solid #000;
     }
-
+    td.post-title {
+      font-weight: bold; color: #333; cursor: pointer;
+    }
     .post-content {
-      display: none;
-      padding: 0.75rem 1rem;
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      margin-top: -1px;
-      font-size: 0.85rem;
-      white-space: pre-wrap;
+      display: none; padding: 0.75rem 1rem;
+      background: #f9f9f9; border-radius: 8px;
+      margin-top: -1px; font-size: 0.85rem; white-space: pre-wrap;
       word-break: break-word;
     }
-
     .modal-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4); display: none;
+      justify-content: center; align-items: center; z-index: 2000;
     }
-
     .modal {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
+      background: white; padding: 2rem; border-radius: 12px;
+      width: 90%; max-width: 400px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
-
     .modal input, .modal textarea {
-      width: 100%;
-      margin-bottom: 1rem;
-      padding: 0.8rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: 'HDHyundaiLight', sans-serif;
-      font-size: 1rem;
-      resize: vertical;
+      width: 100%; margin-bottom: 1rem; padding: 0.8rem;
+      border: 1px solid #ccc; border-radius: 8px;
+      font-size: 1rem; resize: vertical;
     }
-
     .modal-buttons {
       text-align: right;
     }
-
     .modal-buttons button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 6px;
-      font-family: 'HDHyundaiBold';
-      cursor: pointer;
-      font-size: 1rem;
-      min-width: 70px;
-      transition: background-color 0.2s ease;
+      padding: 0.5rem 1rem; border: none; border-radius: 6px;
+      cursor: pointer; font-weight: bold; font-size: 1rem;
+      min-width: 70px; transition: background-color 0.2s ease;
     }
-
     .modal-buttons .submit {
-      background-color: var(--discovery-blue);
-      color: white;
+      background: #003087; color: white;
     }
-    .modal-buttons .submit:disabled {
-      background-color: #5a78b7;
-      cursor: not-allowed;
-    }
-
     .modal-buttons .cancel {
-      background-color: #ccc;
-      color: #333;
-      margin-right: 0.5rem;
-    }
-
-    @media (max-width: 400px) {
-      .navbar-title {
-        font-size: 1.2rem;
-        left: 50%;
-      }
-      .write-btn {
-        padding: 0.4rem 0.7rem;
-        font-size: 0.85rem;
-      }
-      .modal input, .modal textarea {
-        font-size: 0.9rem;
-      }
-      .modal-buttons button {
-        font-size: 0.9rem;
-      }
-      th, td {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.6rem;
-      }
+      background: #ccc; color: #333; margin-right: 0.5rem;
     }
   </style>
 </head>
 <body>
 
   <div class="navbar">
-    <img src="assets/images/logo.png" alt="HD현대 로고" />
-    <div class="navbar-title">
-      <a href="index.html"><span class="hd">U</span>ni <span class="hd">H</span>D</a>
-    </div>
+    <div class="navbar-title">Uni <span style="color:#003087">HD</span></div>
     <div class="lang-switch" id="langSwitch">🌐</div>
   </div>
 
@@ -235,10 +106,10 @@
     <table>
       <thead>
         <tr>
-          <th style="width: 10%;">번호</th>
-          <th style="width: 55%;">제목</th>
-          <th style="width: 20%;">작성자</th>
-          <th style="width: 15%;">작성일</th>
+          <th style="width:10%;">번호</th>
+          <th style="width:55%;">제목</th>
+          <th style="width:20%;">작성자</th>
+          <th style="width:15%;">작성일</th>
         </tr>
       </thead>
       <tbody id="postTableBody"></tbody>
@@ -258,52 +129,33 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      serverTimestamp,
-      query,
-      orderBy,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCiHkjrohV95Xx2YyEeuoS2R4OVGzdsqUw",
-      authDomain: "unihd-747ae.firebaseapp.com",
-      projectId: "unihd-747ae",
-      storageBucket: "unihd-747ae.firebasestorage.app",
-      messagingSenderId: "960671920625",
-      appId: "1:960671920625:web:c44a7852f87980590ed450"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  <script>
+    // 미리 적힌 기본 게시글 (임의 데이터)
+    const defaultPosts = [
+      {author:"홍길동", title:"봄맞이 문화 축제", content:"2025년 4월 20일, 봄맞이 축제가 열립니다.\n많은 참여 바랍니다.", date:"2025-04-15"},
+      {author:"이순신", title:"전통 음악 공연 안내", content:"전통 음악 공연이 5월 1일 개최됩니다.\n장소는 대강당입니다.", date:"2025-04-10"},
+      {author:"김영희", title:"미술 전시회 개최", content:"5월 중순 미술 전시회가 열릴 예정입니다.\n다양한 작품을 감상하세요.", date:"2025-04-05"}
+    ];
 
     let currentLang = "ko";
 
-    // 모달 열기/닫기
     const modalOverlay = document.getElementById("modalOverlay");
     const openModalBtn = document.getElementById("openModalBtn");
     const cancelBtn = document.getElementById("cancelBtn");
     const submitBtn = document.getElementById("submitBtn");
+    const postTableBody = document.getElementById("postTableBody");
 
     openModalBtn.addEventListener("click", () => {
       modalOverlay.style.display = "flex";
     });
-
     cancelBtn.addEventListener("click", () => {
       modalOverlay.style.display = "none";
       clearModalFields();
-      submitBtn.disabled = false;
     });
 
-    // 언어 토글
     document.getElementById("langSwitch").addEventListener("click", () => {
       currentLang = currentLang === "ko" ? "en" : "ko";
-      document.querySelectorAll("[data-lang-ko]").forEach((el) => {
+      document.querySelectorAll("[data-lang-ko]").forEach(el => {
         el.textContent = el.getAttribute(`data-lang-${currentLang}`);
       });
     });
@@ -314,93 +166,42 @@
       document.getElementById("modalContent").value = "";
     }
 
-    // 날짜 포맷 함수
-    function formatDate(dateValue) {
-      if (!dateValue) return "";
-      let date;
-      if (typeof dateValue === "object" && typeof dateValue.toDate === "function") {
-        date = dateValue.toDate();
-      } else if (typeof dateValue === "string" || dateValue instanceof String) {
-        date = new Date(dateValue);
-      } else if (dateValue instanceof Date) {
-        date = dateValue;
-      } else {
-        return "";
-      }
-      if (isNaN(date.getTime())) return "";
-      const year = date.getFullYear().toString().slice(2);
-      const month = (date.getMonth() + 1).toString().padStart(2, "0");
-      const day = date.getDate().toString().padStart(2, "0");
-      return `${year}.${month}.${day}`;
+    // 날짜 표시 포맷 함수
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      if (isNaN(d)) return "";
+      return `${String(d.getFullYear()).slice(2)}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
     }
 
-    // 글 등록 함수
-    async function submitPost() {
-      submitBtn.disabled = true;
+    // 글 목록 렌더링 (기본글 + localStorage에 저장된 글 합침)
+    function renderPostTable(){
+      postTableBody.innerHTML = "";
 
-      const author = document.getElementById("modalAuthor").value.trim();
-      const title = document.getElementById("modalTitle").value.trim();
-      const content = document.getElementById("modalContent").value.trim();
+      // localStorage에서 본인 글 불러오기
+      const savedPosts = JSON.parse(localStorage.getItem("myPosts") || "[]");
 
-      if (!author || !title || !content) {
-        alert("모든 항목을 입력해주세요.");
-        submitBtn.disabled = false;
-        return;
-      }
+      // 날짜 내림차순 정렬: 본인 글 먼저, 그다음 기본글 (최근글 위에)
+      // 단순히 savedPosts 먼저 렌더링하고 그 다음 defaultPosts 렌더링
+      let combined = [...savedPosts, ...defaultPosts];
 
-      try {
-        await addDoc(collection(db, "culturePosts"), {
-          author,
-          title,
-          content,
-          createdAt: serverTimestamp(),
-        });
-        alert("글이 저장되었습니다.");
-        modalOverlay.style.display = "none";
-        clearModalFields();
-        submitBtn.disabled = false;
-        await renderPostTable();
-      } catch (error) {
-        console.error("글 저장 실패:", error);
-        alert("글 저장에 실패했습니다.");
-        submitBtn.disabled = false;
-      }
-    }
-
-    submitBtn.addEventListener("click", submitPost);
-
-    // 글 목록 렌더링 함수
-    async function renderPostTable() {
-      const tbody = document.getElementById("postTableBody");
-      tbody.innerHTML = "";
-
-      const q = query(collection(db, "culturePosts"), orderBy("createdAt", "desc"));
-      const querySnapshot = await getDocs(q);
-
-      let index = 1;
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-
-        // 글 제목 행
+      combined.forEach((post, index) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${index++}</td>
-          <td class="post-title">${data.title}</td>
-          <td>${data.author}</td>
-          <td>${formatDate(data.createdAt)}</td>
+          <td>${combined.length - index}</td>
+          <td class="post-title">${post.title}</td>
+          <td>${post.author}</td>
+          <td>${formatDate(post.date)}</td>
         `;
 
-        // 글 내용 숨겨진 행
         const contentRow = document.createElement("tr");
         const contentCell = document.createElement("td");
         contentCell.colSpan = 4;
-        contentCell.innerHTML = `<div class="post-content">${data.content.replace(/\n/g, "<br>")}</div>`;
+        contentCell.innerHTML = `<div class="post-content">${post.content.replace(/\n/g,"<br>")}</div>`;
         contentRow.appendChild(contentCell);
 
-        tbody.appendChild(tr);
-        tbody.appendChild(contentRow);
+        postTableBody.appendChild(tr);
+        postTableBody.appendChild(contentRow);
 
-        // 제목 클릭시 내용 토글
         tr.querySelector(".post-title").addEventListener("click", () => {
           const contentDiv = contentCell.querySelector(".post-content");
           contentDiv.style.display = contentDiv.style.display === "none" || contentDiv.style.display === "" ? "block" : "none";
@@ -408,7 +209,28 @@
       });
     }
 
-    window.addEventListener("load", renderPostTable);
+    submitBtn.addEventListener("click", () => {
+      const author = document.getElementById("modalAuthor").value.trim();
+      const title = document.getElementById("modalTitle").value.trim();
+      const content = document.getElementById("modalContent").value.trim();
+      const todayStr = new Date().toISOString().split("T")[0];
+
+      if(!author || !title || !content){
+        alert("모든 항목을 입력해주세요.");
+        return;
+      }
+
+      // localStorage에 저장
+      const myPosts = JSON.parse(localStorage.getItem("myPosts") || "[]");
+      myPosts.unshift({author, title, content, date: todayStr});
+      localStorage.setItem("myPosts", JSON.stringify(myPosts));
+
+      modalOverlay.style.display = "none";
+      clearModalFields();
+      renderPostTable();
+    });
+
+    window.onload = renderPostTable;
   </script>
 </body>
 </html>

@@ -22,19 +22,21 @@
       z-index: 1000;
     }
 
-    .navbar-logo img {
+    .navbar img {
       height: 32px;
     }
 
-    .navbar-title {
+    .navbar-title a {
       font-weight: bold;
       font-size: 1.5rem;
       color: #003087;
       text-decoration: none;
     }
 
-    .lang-switch {
-      font-size: 1.3rem;
+    .lang-icon {
+      width: 24px;
+      height: 24px;
+      fill: #003087;
       cursor: pointer;
     }
 
@@ -129,7 +131,6 @@
       color: white;
     }
 
-    /* modal */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -175,23 +176,37 @@
 </head>
 <body>
   <div class="navbar">
-    <div class="navbar-logo"><img src="logo.png" alt="logo" /></div>
-    <a href="index.html" class="navbar-title">UniHD</a>
-    <div class="lang-switch" id="langSwitch">🌐</div>
+    <img src="assets/images/logo.png" alt="UniHD 로고" />
+    <div class="navbar-title">
+      <a href="index.html" data-lang="ko"><span class="hd">Uni</span>HD</a>
+      <a href="index.html" data-lang="en" style="display:none;"><span class="hd">Uni</span>HD</a>
+    </div>
+    <svg class="lang-icon" id="langToggle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-label="언어 변경">
+      <title>언어 변경</title>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+        10-4.48 10-10S17.52 2 12 2zm5.93 7h-3.14a15.366 15.366 0 00-1.19-3.66
+        8.036 8.036 0 014.33 3.66zm-5.93-5.9c1.7 0 3.3.63 4.5 1.7a13.665 13.665 0 00-4.5
+        3.44 13.687 13.687 0 00-4.5-3.44c1.2-1.07 2.8-1.7 4.5-1.7zm-5.93 4.2c.27-1.08.74-2.1
+        1.36-3.02A8.065 8.065 0 006.07 8zm-4.5 4a8.045 8.045 0 014.5-3.66 15.35 15.35 0 00-1.19
+        3.66H1.57zm.67 2h3.14a15.366 15.366 0 001.19 3.66 8.04 8.04 0 01-4.33-3.66zm5.26
+        5.9c-1.7 0-3.3-.63-4.5-1.7a13.68 13.68 0 004.5-3.44 13.68 13.68 0 004.5
+        3.44c-1.2 1.07-2.8 1.7-4.5 1.7zm5.26-2.96a15.35 15.35 0 001.19-3.66h3.14a8.04 8.04 0
+        01-4.33 3.66zm.98-6.04a15.36 15.36 0 001.19 3.66h3.14a8.04 8.04 0 01-4.33-3.66z"/>
+    </svg>
   </div>
 
   <div class="board-container">
     <div class="board-header">
       <h2 data-lang-ko="문화행사" data-lang-en="Events">문화행사</h2>
-      <button class="write-btn" id="openModalBtn">글쓰기</button>
+      <button class="write-btn" id="openModalBtn" data-lang-ko="글쓰기" data-lang-en="Write">글쓰기</button>
     </div>
     <table>
       <thead>
         <tr>
-          <th>번호</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>날짜</th>
+          <th data-lang-ko="번호" data-lang-en="No.">번호</th>
+          <th data-lang-ko="제목" data-lang-en="Title">제목</th>
+          <th data-lang-ko="작성자" data-lang-en="Author">작성자</th>
+          <th data-lang-ko="날짜" data-lang-en="Date">날짜</th>
         </tr>
       </thead>
       <tbody id="postTableBody"></tbody>
@@ -199,7 +214,6 @@
     <div class="pagination" id="pagination"></div>
   </div>
 
-  <!-- Modal -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <h3 style="margin-top:0;">새 글 작성</h3>
@@ -214,6 +228,8 @@
   </div>
 
   <script>
+    const POSTS_PER_PAGE = 10;
+    let currentLang = "ko";
     const defaultPosts = Array.from({length: 20}, (_, i) => ({
       author: "관리자",
       title: `문화행사 공지사항 ${20 - i}`,
@@ -221,15 +237,21 @@
       date: `2025-07-${String(10 - Math.floor(i/2)).padStart(2,'0')}`
     }));
 
-    let currentLang = "ko";
     const modalOverlay = document.getElementById("modalOverlay");
     const openModalBtn = document.getElementById("openModalBtn");
     const cancelBtn = document.getElementById("cancelBtn");
     const submitBtn = document.getElementById("submitBtn");
     const postTableBody = document.getElementById("postTableBody");
     const pagination = document.getElementById("pagination");
-    const POSTS_PER_PAGE = 5;
+
     let currentPage = 1;
+
+    document.getElementById("langToggle").addEventListener("click", () => {
+      currentLang = currentLang === "ko" ? "en" : "ko";
+      document.querySelectorAll("[data-lang-ko]").forEach(el => {
+        el.textContent = el.getAttribute(`data-lang-${currentLang}`);
+      });
+    });
 
     openModalBtn.addEventListener("click", () => {
       modalOverlay.style.display = "flex";
@@ -240,11 +262,24 @@
       clearModalFields();
     });
 
-    document.getElementById("langSwitch").addEventListener("click", () => {
-      currentLang = currentLang === "ko" ? "en" : "ko";
-      document.querySelectorAll("[data-lang-ko]").forEach(el => {
-        el.textContent = el.getAttribute(`data-lang-${currentLang}`);
-      });
+    submitBtn.addEventListener("click", () => {
+      const author = document.getElementById("modalAuthor").value.trim();
+      const title = document.getElementById("modalTitle").value.trim();
+      const content = document.getElementById("modalContent").value.trim();
+      const todayStr = new Date().toISOString().split("T")[0];
+
+      if(!author || !title || !content){
+        alert("모든 항목을 입력해주세요.");
+        return;
+      }
+
+      const myPosts = JSON.parse(localStorage.getItem("myPosts") || "[]");
+      myPosts.unshift({author, title, content, date: todayStr});
+      localStorage.setItem("myPosts", JSON.stringify(myPosts));
+
+      modalOverlay.style.display = "none";
+      clearModalFields();
+      renderPostTable();
     });
 
     function clearModalFields() {
@@ -305,26 +340,6 @@
 
       renderPagination(allPosts.length);
     }
-
-    submitBtn.addEventListener("click", () => {
-      const author = document.getElementById("modalAuthor").value.trim();
-      const title = document.getElementById("modalTitle").value.trim();
-      const content = document.getElementById("modalContent").value.trim();
-      const todayStr = new Date().toISOString().split("T")[0];
-
-      if(!author || !title || !content){
-        alert("모든 항목을 입력해주세요.");
-        return;
-      }
-
-      const myPosts = JSON.parse(localStorage.getItem("myPosts") || "[]");
-      myPosts.unshift({author, title, content, date: todayStr});
-      localStorage.setItem("myPosts", JSON.stringify(myPosts));
-
-      modalOverlay.style.display = "none";
-      clearModalFields();
-      renderPostTable();
-    });
 
     window.onload = renderPostTable;
   </script>

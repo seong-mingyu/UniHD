@@ -64,12 +64,13 @@
     }
 
     .board-container {
-      max-width: 900px;
-      margin: 2rem auto;
+      max-width: 100%;
+      margin: 1rem auto;
       padding: 1rem;
       background: white;
       border-radius: 12px;
       box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      overflow-x: auto; /* 가로스크롤 가능 */
     }
 
     .board-header {
@@ -94,6 +95,7 @@
     }
 
     table {
+      min-width: 600px;
       width: 100%;
       border-collapse: collapse;
       margin-top: 1rem;
@@ -142,7 +144,7 @@
       padding: 2rem;
       border-radius: 12px;
       width: 90%;
-      max-width: 500px;
+      max-width: 400px; /* 모바일 적합 크기 */
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
@@ -152,6 +154,8 @@
       padding: 0.8rem;
       border: 1px solid #ccc;
       border-radius: 8px;
+      font-family: 'HDHyundaiLight', sans-serif;
+      font-size: 1rem;
     }
 
     .modal-buttons {
@@ -164,6 +168,7 @@
       border-radius: 6px;
       font-family: 'HDHyundaiBold';
       cursor: pointer;
+      font-size: 1rem;
     }
 
     .modal-buttons .submit {
@@ -175,6 +180,24 @@
       background-color: #ccc;
       color: #333;
       margin-right: 0.5rem;
+    }
+
+    /* 모바일 화면 폰트 조절 */
+    @media (max-width: 400px) {
+      .navbar-title {
+        font-size: 1.2rem;
+        left: 50%;
+      }
+      .write-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      .modal input, .modal textarea {
+        font-size: 0.9rem;
+      }
+      .modal-buttons button {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -240,33 +263,45 @@
 
     let currentLang = 'ko';
 
+    window.openModal = function() {
+      document.getElementById('modalOverlay').style.display = 'flex';
+    };
+
+    window.closeModal = function() {
+      document.getElementById('modalOverlay').style.display = 'none';
+      document.getElementById('modalAuthor').value = '';
+      document.getElementById('modalTitle').value = '';
+      document.getElementById('modalContent').value = '';
+    };
+
     function toggleLanguage() {
       currentLang = currentLang === 'ko' ? 'en' : 'ko';
       document.querySelectorAll('[data-lang-ko]').forEach(el => {
         el.textContent = el.getAttribute(`data-lang-${currentLang}`);
       });
+      // 게시글 내용 다국어 처리 필요하면 여기에 추가 구현
     }
 
-    function formatDate(dateStr) {
-      // Firestore Timestamp → YYYY.MM.DD 문자열 변환
-      if (!dateStr) return "";
-      try {
-        const date = dateStr.toDate ? dateStr.toDate() : new Date(dateStr);
-        return `${date.getFullYear().toString().slice(2)}.${(date.getMonth()+1).toString().padStart(2,'0')}.${date.getDate().toString().padStart(2,'0')}`;
-      } catch {
+    function formatDate(dateValue) {
+      if (!dateValue) return "";
+      let date;
+      if (typeof dateValue === 'object' && typeof dateValue.toDate === 'function') {
+        date = dateValue.toDate();
+      } else if (typeof dateValue === 'string' || dateValue instanceof String) {
+        date = new Date(dateValue);
+      } else if (dateValue instanceof Date) {
+        date = dateValue;
+      } else {
         return "";
       }
-    }
 
-    function openModal() {
-      document.getElementById('modalOverlay').style.display = 'flex';
-    }
+      if (isNaN(date.getTime())) return "";
 
-    function closeModal() {
-      document.getElementById('modalOverlay').style.display = 'none';
-      document.getElementById('modalAuthor').value = '';
-      document.getElementById('modalTitle').value = '';
-      document.getElementById('modalContent').value = '';
+      const year = date.getFullYear().toString().slice(2);
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
+
+      return `${year}.${month}.${day}`;
     }
 
     // Firebase 초기화
@@ -327,7 +362,6 @@
           <td>${formatDate(data.createdAt)}</td>
         `;
 
-        // 내용 숨겨진 행 생성
         const contentRow = document.createElement('tr');
         const contentCell = document.createElement('td');
         contentCell.colSpan = 4;
@@ -337,7 +371,6 @@
         tbody.appendChild(tr);
         tbody.appendChild(contentRow);
 
-        // 제목 클릭 시 내용 토글
         tr.querySelector('.post-title').addEventListener('click', () => {
           const contentDiv = contentCell.querySelector('.post-content');
           contentDiv.style.display = contentDiv.style.display === 'block' ? 'none' : 'block';

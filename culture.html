@@ -11,42 +11,52 @@
     }
 
     .navbar {
-  position: relative; /* position absolute 자식이 있으니 부모에 relative 지정 필요 */
   display: flex;
-  justify-content: center; /* 중앙정렬 보조 */
+  justify-content: space-between;
   align-items: center;
-  background: white;
+  background-color: white;
   padding: 1rem 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
   top: 0;
   z-index: 1000;
 }
 
 .navbar img {
-  position: absolute;
-  left: 1.5rem; /* 왼쪽 로고 고정 위치 */
   height: 32px;
 }
 
 .navbar-title {
+  font-size: 1.5rem;
+  font-family: 'HDHyundaiBold';
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: #003087;
-  text-align: center;
-  white-space: nowrap;
+  user-select: none;
+}
+
+.navbar-title a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar-title .hd {
+  color: var(--discovery-blue);
 }
 
 .lang-icon {
-  position: absolute;
-  right: 1.5rem;
   cursor: pointer;
   width: 24px;
   height: 24px;
-  fill: #003087;
+  fill: var(--gray-text);
+  transition: fill 0.3s;
+  user-select: none;
 }
+
+.lang-icon:hover {
+  fill: var(--discovery-blue);
+}
+
 
 
     .board-container {

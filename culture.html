@@ -226,7 +226,18 @@
   </div>
 
   <!-- ✅ 스크립트 -->
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp,
+      query,
+      orderBy,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
     let currentLang = 'ko';
 
     function toggleLanguage() {
@@ -237,8 +248,14 @@
     }
 
     function formatDate(dateStr) {
-      const [y, m, d] = dateStr.split('-');
-      return `${y.slice(2)}.${m}.${d}`;
+      // Firestore Timestamp → YYYY.MM.DD 문자열 변환
+      if (!dateStr) return "";
+      try {
+        const date = dateStr.toDate ? dateStr.toDate() : new Date(dateStr);
+        return `${date.getFullYear().toString().slice(2)}.${(date.getMonth()+1).toString().padStart(2,'0')}.${date.getDate().toString().padStart(2,'0')}`;
+      } catch {
+        return "";
+      }
     }
 
     function openModal() {
@@ -252,51 +269,78 @@
       document.getElementById('modalContent').value = '';
     }
 
-    function submitPost() {
+    // Firebase 초기화
+    const firebaseConfig = {
+      apiKey: "AIzaSyCiHkjrohV95Xx2YyEeuoS2R4OVGzdsqUw",
+      authDomain: "unihd-747ae.firebaseapp.com",
+      projectId: "unihd-747ae",
+      storageBucket: "unihd-747ae.firebasestorage.app",
+      messagingSenderId: "960671920625",
+      appId: "1:960671920625:web:c44a7852f87980590ed450"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function submitPost() {
       const author = document.getElementById('modalAuthor').value.trim();
       const title = document.getElementById('modalTitle').value.trim();
       const content = document.getElementById('modalContent').value.trim();
-      const date = new Date().toISOString().split('T')[0];
 
       if (!author || !title || !content) {
         alert("모든 항목을 입력해주세요.");
         return;
       }
 
-      const posts = JSON.parse(localStorage.getItem('culturePosts') || '[]');
-      posts.unshift({ author, title, content, date });
-      localStorage.setItem('culturePosts', JSON.stringify(posts));
-      closeModal();
-      renderPostTable();
+      try {
+        await addDoc(collection(db, "culturePosts"), {
+          author,
+          title,
+          content,
+          createdAt: serverTimestamp()
+        });
+        alert("글이 저장되었습니다.");
+        closeModal();
+        renderPostTable();
+      } catch (error) {
+        console.error("글 저장 실패:", error);
+        alert("글 저장에 실패했습니다.");
+      }
     }
 
-    function renderPostTable() {
-      const posts = JSON.parse(localStorage.getItem('culturePosts') || '[]');
+    async function renderPostTable() {
       const tbody = document.getElementById('postTableBody');
       tbody.innerHTML = '';
 
-      posts.forEach((post, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${posts.length - index}</td>
-          <td class="post-title">${post.title}</td>
-          <td>${post.author}</td>
-          <td>${formatDate(post.date)}</td>
-        `;
-        row.classList.add('post-row');
+      const q = query(collection(db, "culturePosts"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
 
+      let index = 1;
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${index++}</td>
+          <td class="post-title">${data.title}</td>
+          <td>${data.author}</td>
+          <td>${formatDate(data.createdAt)}</td>
+        `;
+
+        // 내용 숨겨진 행 생성
         const contentRow = document.createElement('tr');
         const contentCell = document.createElement('td');
         contentCell.colSpan = 4;
-        contentCell.innerHTML = `<div class="post-content">${post.content}</div>`;
+        contentCell.innerHTML = `<div class="post-content">${data.content}</div>`;
         contentRow.appendChild(contentCell);
 
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
         tbody.appendChild(contentRow);
 
-        row.addEventListener('click', () => {
+        // 제목 클릭 시 내용 토글
+        tr.querySelector('.post-title').addEventListener('click', () => {
           const contentDiv = contentCell.querySelector('.post-content');
-          contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
+          contentDiv.style.display = contentDiv.style.display === 'block' ? 'none' : 'block';
         });
       });
     }

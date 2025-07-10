@@ -5,57 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hi-Dock - 문화행사</title>
   <style>
+    :root {
+      --discovery-blue: #003087;
+      --gray-text: #63666A;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      margin: 0; background: #f4f4f4; color: #63666A;
+      margin: 0; 
+      background: #f4f4f4; 
+      color: var(--gray-text);
     }
 
     .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-.navbar img {
-  height: 32px;
-}
+    .navbar img {
+      height: 32px;
+    }
 
-.navbar-title {
-  font-size: 1.5rem;
-  font-family: 'HDHyundaiBold';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  user-select: none;
-}
+    .navbar-title {
+      font-size: 1.5rem;
+      font-family: 'HDHyundaiBold', Arial, sans-serif; /* 볼드체 폰트명 넣기 */
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      user-select: none;
+    }
 
-.navbar-title a {
-  text-decoration: none;
-  color: inherit;
-}
+    .navbar-title a {
+      text-decoration: none;
+      color: inherit;
+      font-weight: normal; /* a 태그 기본 weight 유지 */
+    }
 
-.navbar-title .hd {
-  color: var(--discovery-blue);
-}
+    .navbar-title .hd {
+      color: var(--discovery-blue);
+      font-weight: bold; /* 확실한 볼드 */
+    }
 
-.lang-icon {
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  fill: var(--gray-text);
-  transition: fill 0.3s;
-  user-select: none;
-}
+    .lang-icon {
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      fill: var(--gray-text);
+      transition: fill 0.3s;
+      user-select: none;
+    }
 
-.lang-icon:hover {
-  fill: var(--discovery-blue);
-}
+    .lang-icon:hover {
+      fill: var(--discovery-blue);
+    }
 
 
 

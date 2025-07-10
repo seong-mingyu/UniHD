@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniHD - 문화행사</title>
+  <link rel="icon" href="assets/images/logo.png" type="image/png">
+  <style>
+    @font-face {
+      font-family: 'HDHyundaiLight';
+      src: url('assets/fonts/HDHyundai-Light.ttf');
+    }
+    @font-face {
+      font-family: 'HDHyundaiBold';
+      src: url('assets/fonts/HDHyundai-Bold.ttf');
+    }
+    :root {
+      --discovery-blue: #003087;
+      --prosperity-green: #008233;
+      --trust-blue: #002554;
+      --gray-text: #63666A;
+      --bg-light: #f4f4f4;
+    }
+    body {
+      font-family: 'HDHyundaiLight', sans-serif;
+      margin: 0;
+      background-color: var(--bg-light);
+      color: var(--gray-text);
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-title {
+      font-size: 1.5rem;
+      font-family: 'HDHyundaiBold';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .navbar-title a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .navbar-title .hd {
+      color: var(--discovery-blue);
+    }
+    .lang-switch {
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: var(--discovery-blue);
+      font-family: 'HDHyundaiBold';
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: 'HDHyundaiLight';
+    }
+    button {
+      padding: 0.6rem 1.2rem;
+      background-color: var(--discovery-blue);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .post {
+      margin-top: 2rem;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+    }
+    .post h3 {
+      margin-bottom: 0.5rem;
+      color: var(--trust-blue);
+    }
+    .comment-section {
+      margin-top: 1rem;
+    }
+    .comment {
+      background: #f4f4f4;
+      padding: 0.5rem;
+      margin: 0.3rem 0;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <img src="assets/images/logo.png" alt="HD현대 로고" height="32">
+    <div class="navbar-title">
+      <a href="index.html"><span class="hd">U</span>ni <span class="hd">H</span>D</a>
+    </div>
+    <div class="lang-switch" onclick="toggleLanguage()">🌐</div>
+  </div>
+
+  <div class="container">
+    <h2 data-lang-ko="문화 행사 게시판" data-lang-en="Cultural Events Board">문화 행사 게시판</h2>
+    <input type="text" id="titleInput" placeholder="제목을 입력하세요">
+    <textarea id="contentInput" rows="4" placeholder="내용을 입력하세요"></textarea>
+    <button onclick="addPost()">글 작성</button>
+
+    <div id="postList"></div>
+  </div>
+
+  <script>
+    let currentLang = 'ko';
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ko' ? 'en' : 'ko';
+      document.querySelectorAll('[data-lang-ko]').forEach(el => {
+        el.textContent = el.getAttribute(`data-lang-${currentLang}`);
+      });
+    }
+
+    function addPost() {
+      const title = document.getElementById('titleInput').value.trim();
+      const content = document.getElementById('contentInput').value.trim();
+      if (!title || !content) return;
+
+      const post = { title, content, comments: [] };
+      const posts = JSON.parse(localStorage.getItem('culturePosts') || '[]');
+      posts.unshift(post);
+      localStorage.setItem('culturePosts', JSON.stringify(posts));
+      document.getElementById('titleInput').value = '';
+      document.getElementById('contentInput').value = '';
+      renderPosts();
+    }
+
+    function addComment(index, commentText) {
+      const posts = JSON.parse(localStorage.getItem('culturePosts') || '[]');
+      posts[index].comments.push(commentText);
+      localStorage.setItem('culturePosts', JSON.stringify(posts));
+      renderPosts();
+    }
+
+    function renderPosts() {
+      const postList = document.getElementById('postList');
+      const posts = JSON.parse(localStorage.getItem('culturePosts') || '[]');
+      postList.innerHTML = '';
+      posts.forEach((post, i) => {
+        const postEl = document.createElement('div');
+        postEl.className = 'post';
+        postEl.innerHTML = `
+          <h3>${post.title}</h3>
+          <p>${post.content}</p>
+          <div class="comment-section">
+            <input type="text" placeholder="댓글을 입력하세요" onkeypress="if(event.key==='Enter'){ addComment(${i}, this.value); this.value=''; }">
+            <div>
+              ${post.comments.map(c => `<div class="comment">${c}</div>`).join('')}
+            </div>
+          </div>
+        `;
+        postList.appendChild(postEl);
+      });
+    }
+
+    window.onload = renderPosts;
+  </script>
+</body>
+</html>

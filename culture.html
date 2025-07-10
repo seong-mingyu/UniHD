@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>UniHD - 문화행사</title>
+  <title>Hi-Dock - 문화행사</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,34 +11,43 @@
     }
 
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: white;
-      padding: 1rem 1.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
+  position: relative; /* position absolute 자식이 있으니 부모에 relative 지정 필요 */
+  display: flex;
+  justify-content: center; /* 중앙정렬 보조 */
+  align-items: center;
+  background: white;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  top: 0;
+  z-index: 1000;
+}
 
-    .navbar img {
-      height: 32px;
-    }
+.navbar img {
+  position: absolute;
+  left: 1.5rem; /* 왼쪽 로고 고정 위치 */
+  height: 32px;
+}
 
-    .navbar-title a {
-      font-weight: bold;
-      font-size: 1.5rem;
-      color: #003087;
-      text-decoration: none;
-    }
+.navbar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #003087;
+  text-align: center;
+  white-space: nowrap;
+}
 
-    .lang-icon {
-      width: 24px;
-      height: 24px;
-      fill: #003087;
-      cursor: pointer;
-    }
+.lang-icon {
+  position: absolute;
+  right: 1.5rem;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  fill: #003087;
+}
+
 
     .board-container {
       max-width: 480px;

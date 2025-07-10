@@ -21,12 +21,15 @@
       --gray-text: #63666A;
       --bg-light: #f4f4f4;
     }
+
     body {
       font-family: 'HDHyundaiLight', sans-serif;
       margin: 0;
       background-color: var(--bg-light);
       color: var(--gray-text);
     }
+
+    /* ✅ 상단 네비게이션 */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -38,6 +41,9 @@
       top: 0;
       z-index: 1000;
     }
+    .navbar img {
+      height: 32px;
+    }
     .navbar-title {
       font-size: 1.5rem;
       font-family: 'HDHyundaiBold';
@@ -45,12 +51,16 @@
       left: 50%;
       transform: translateX(-50%);
     }
+    .navbar-title a {
+      text-decoration: none;
+      color: inherit;
+    }
     .navbar-title .hd {
       color: var(--discovery-blue);
     }
     .lang-switch {
+      font-size: 1.3rem;
       cursor: pointer;
-      font-size: 1.2rem;
     }
 
     .board-container {
@@ -61,16 +71,18 @@
       border-radius: 12px;
       box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
+
     .board-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
     }
+
     .board-header h2 {
-      color: var(--discovery-blue);
       font-family: 'HDHyundaiBold';
+      color: var(--discovery-blue);
     }
+
     .write-btn {
       padding: 0.5rem 1rem;
       background-color: var(--prosperity-green);
@@ -86,22 +98,34 @@
       border-collapse: collapse;
       margin-top: 1rem;
     }
+
     th, td {
       padding: 0.75rem;
       border-bottom: 1px solid #ddd;
-      text-align: left;
       font-size: 0.95rem;
     }
+
     th {
       font-family: 'HDHyundaiBold';
       border-bottom: 2px solid #000;
+      text-align: left;
     }
-    tr:hover {
-      background-color: #f9f9f9;
+
+    td.post-title {
+      font-weight: bold;
+      color: #333;
       cursor: pointer;
     }
 
-    /* 모달 스타일 */
+    .post-content {
+      display: none;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      margin-top: -1px;
+      font-size: 0.9rem;
+    }
+
     .modal-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -112,6 +136,7 @@
       align-items: center;
       z-index: 2000;
     }
+
     .modal {
       background: white;
       padding: 2rem;
@@ -120,6 +145,7 @@
       max-width: 500px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
+
     .modal input, .modal textarea {
       width: 100%;
       margin-bottom: 1rem;
@@ -127,9 +153,11 @@
       border: 1px solid #ccc;
       border-radius: 8px;
     }
+
     .modal-buttons {
       text-align: right;
     }
+
     .modal-buttons button {
       padding: 0.5rem 1rem;
       border: none;
@@ -137,10 +165,12 @@
       font-family: 'HDHyundaiBold';
       cursor: pointer;
     }
+
     .modal-buttons .submit {
       background-color: var(--discovery-blue);
       color: white;
     }
+
     .modal-buttons .cancel {
       background-color: #ccc;
       color: #333;
@@ -149,37 +179,39 @@
   </style>
 </head>
 <body>
-  <!-- 상단 바 -->
+
+  <!-- ✅ 상단바 -->
   <div class="navbar">
-    <img src="assets/images/logo.png" alt="HD현대 로고" height="32">
+    <img src="assets/images/logo.png" alt="HD현대 로고">
     <div class="navbar-title">
       <a href="index.html"><span class="hd">U</span>ni <span class="hd">H</span>D</a>
     </div>
     <div class="lang-switch" onclick="toggleLanguage()">🌐</div>
   </div>
 
-  <!-- 게시판 본문 -->
+  <!-- ✅ 게시판 본문 -->
   <div class="board-container">
     <div class="board-header">
       <h2 data-lang-ko="문화 행사 게시판" data-lang-en="Cultural Events Board">문화 행사 게시판</h2>
       <button class="write-btn" onclick="openModal()">글쓰기</button>
     </div>
+
     <table>
       <thead>
         <tr>
-          <th>번호</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>작성일</th>
+          <th style="width: 10%;">번호</th>
+          <th style="width: 55%;">제목</th>
+          <th style="width: 20%;">작성자</th>
+          <th style="width: 15%;">작성일</th>
         </tr>
       </thead>
       <tbody id="postTableBody">
-        <!-- 게시글 출력 영역 -->
+        <!-- 게시글 동적 렌더링 -->
       </tbody>
     </table>
   </div>
 
-  <!-- 모달 창 -->
+  <!-- ✅ 모달 -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <h3 style="margin-top:0;">새 글 작성</h3>
@@ -193,7 +225,7 @@
     </div>
   </div>
 
-  <!-- 스크립트 -->
+  <!-- ✅ 스크립트 -->
   <script>
     let currentLang = 'ko';
 
@@ -202,6 +234,11 @@
       document.querySelectorAll('[data-lang-ko]').forEach(el => {
         el.textContent = el.getAttribute(`data-lang-${currentLang}`);
       });
+    }
+
+    function formatDate(dateStr) {
+      const [y, m, d] = dateStr.split('-');
+      return `${y.slice(2)}.${m}.${d}`;
     }
 
     function openModal() {
@@ -237,15 +274,30 @@
       const posts = JSON.parse(localStorage.getItem('culturePosts') || '[]');
       const tbody = document.getElementById('postTableBody');
       tbody.innerHTML = '';
+
       posts.forEach((post, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${posts.length - index}</td>
-          <td>${post.title}</td>
+          <td class="post-title">${post.title}</td>
           <td>${post.author}</td>
-          <td>${post.date}</td>
+          <td>${formatDate(post.date)}</td>
         `;
+        row.classList.add('post-row');
+
+        const contentRow = document.createElement('tr');
+        const contentCell = document.createElement('td');
+        contentCell.colSpan = 4;
+        contentCell.innerHTML = `<div class="post-content">${post.content}</div>`;
+        contentRow.appendChild(contentCell);
+
         tbody.appendChild(row);
+        tbody.appendChild(contentRow);
+
+        row.addEventListener('click', () => {
+          const contentDiv = contentCell.querySelector('.post-content');
+          contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
+        });
       });
     }
 
